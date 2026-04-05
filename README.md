@@ -2,6 +2,20 @@
 
 A full-stack URL shortening application with guest link creation, user authentication, and comprehensive analytics dashboard.
 
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/homePage.png)
+
+### Login
+![Login](screenshots/login.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Link Analytics
+![Link Analytics](screenshots/linkAnalytics.png)
+
 ## Features
 
 - **Guest Link Creation**: Create short links without registration
