@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  links         Link[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model Link {
+  id          String   @id @default(cuid())
+  shortCode   String   @unique
+  originalUrl String
+  title       String?
+  isActive    Boolean  @default(true)
+  expiresAt   DateTime?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guestId     String?
+  clicks      Click[]
+  createdAt   DateTime @default(now())
+
+  @@index([shortCode])
+  @@index([userId])
+  @@index([guestId])
+  @@map("links")
+}
+
+model Click {
+  id         String   @id @default(cuid())
+  linkId     String
+  link       Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  ip         String?
+  country    String?
+  city       String?
+  device     String?
+  browser    String?
+  os         String?
+  referer    String?
+  isUnique   Boolean  @default(false)
+  clickedAt  DateTime @default(now())
+
+  @@index([linkId])
+  @@index([clickedAt])
+  @@index([linkId, clickedAt])
+  @@map("clicks")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
